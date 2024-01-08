@@ -1,16 +1,11 @@
 "use strict"
 
-function getData(){
-    ajaxGetRequest('/data', generateBetterMapBox);
-}
-
-
 //This function takes a dataJSON of the format:
 //{'Type of Crime' : {'longitude' : list, 'latitude' : list, 'labels' : list}, etc}
 //It then should create a PlotyPlot with the data dictionaries seperated by crime so they can be color-coded!
 
-function generateBetterMapBox(dataJSON){
-    let data = JSON.parse(dataJSON)
+async function generateBetterMapBox(dataJSON){
+    let data = await plotlyDataGenerator(14);
     let plotlyList = []
     for (let key of Object.keys(data)) {
         let currDic = data[key]
@@ -46,6 +41,5 @@ function generateBetterMapBox(dataJSON){
     };
 
     Plotly.newPlot('map', plotlyList, layout);
-
 }
 
