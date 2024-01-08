@@ -9,7 +9,8 @@ async function generateBetterMapBox(dataJSON) {
         let data = await plotlyDataGenerator(14);
         let plotlyList = [];
 
-        // Ensure that data is an array
+        //TODO: Not recieving an array.
+        console.log(typeof(data));
         if (!Array.isArray(data)) {
             console.error('Invalid data format. Expected an array.');
             return;
