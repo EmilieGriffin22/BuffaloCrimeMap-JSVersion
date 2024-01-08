@@ -7,7 +7,7 @@
 async function generateBetterMapBox(dataJSON){
     let data = await plotlyDataGenerator(14);
     let plotlyList = []
-    for (let key of Object.keys(data)) {
+    for (let key of data) {
         let currDic = data[key]
         let dataDic = {
             type : 'scattermapbox',
