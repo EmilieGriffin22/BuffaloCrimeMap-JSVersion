@@ -7,6 +7,7 @@
 async function generateBetterMapBox(dataJSON){
     let data = await plotlyDataGenerator(14);
     let plotlyList = []
+    //TODO: Fix issue with data being a promise (this function is asynchonous).
     for (let key of data) {
         let currDic = data[key]
         let dataDic = {
