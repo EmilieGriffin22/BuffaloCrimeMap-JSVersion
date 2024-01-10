@@ -9,6 +9,7 @@ async function generateBetterMapBox(dataJSON) {
         let plotlyList = [];
 
         for (let key of data) {
+            //TODO: Curr dic for some reason is undefined.
             let currDic = data[key];
             let dataDic = {
                 type: 'scattermapbox',
