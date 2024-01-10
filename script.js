@@ -5,16 +5,8 @@
 //It then should create a PlotyPlot with the data dictionaries seperated by crime so they can be color-coded!
 
 async function generateBetterMapBox(dataJSON) {
-    try {
         let data = await plotlyDataGenerator(14);
         let plotlyList = [];
-
-        //TODO: Not recieving an array.
-        console.log(typeof(data));
-        if (!Array.isArray(data)) {
-            console.error('Invalid data format. Expected an array.');
-            return;
-        }
 
         for (let key of data) {
             let currDic = data[key];
@@ -50,9 +42,6 @@ async function generateBetterMapBox(dataJSON) {
         };
 
         Plotly.newPlot('map', plotlyList, layout);
-    } catch (error) {
-        console.error('Error fetching or processing data:', error);
-    }
 }
 
 
