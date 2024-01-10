@@ -80,7 +80,7 @@ async function plotlyDataGenerator(recency){
         acc.push(obj);
     }
 
-    console.log(acc);
+    return acc;
 }
 
 
