@@ -1,4 +1,5 @@
 "use strict"
+
 function urlGenerator(num){ //Gets the url needed to retrieve data as a string.
     let current_date = new Date();
     let begin_date = new Date();
@@ -8,11 +9,11 @@ function urlGenerator(num){ //Gets the url needed to retrieve data as a string.
     let query_string = "$where=incident_datetime between '" + begin_timeStamp.toString() + "' and '" + current_timeStamp.toString() +"'";
     let url = 'https://data.buffalony.gov/resource/d6g9-xbgu.json?';
     url += query_string;
-    url = url.replaceAll(" ", "%20");
-    url = url.replaceAll("'", "%27");
+    url = url.replace(/ /g, "%20");
+    url = url.replace(/'/g, "%27");
     return url;
 }
-function crimeDicGen(url, crime, data){
+function crimeDicGen(crime, data){
     let acc = {'longitude' : [], 'latitude' : [], 'labels' : []};
     for(let obj of data){
         if (obj['incident_type_primary'] === crime){
@@ -70,18 +71,67 @@ async function list_of_crimes(url){
     return crime_list;
 }
 
-async function plotlyDataGenerator(recency){
+async function plotlyDataGenerator(recency) {
     let url = urlGenerator(recency);
+
     let crime_list = await list_of_crimes(url);
+
     let data = await data_filter(url);
-    let acc = [];
-    for(let crime of crime_list){
-        let obj = crimeDicGen(url, crime, data);
-        acc.push(obj);
+    let plotly_data = {};
+
+    let acc = {};
+    for (let crime of crime_list) {
+        let obj = crimeDicGen(crime, data);
+        acc[crime] = obj;
     }
+
 
     return acc;
 }
+
+
+async function generateBetterMapBox(){
+    let data = await plotlyDataGenerator(14);
+    let plotlyList = [];
+    for (let key of Object.keys(data)) {
+        let currDic = data[key];
+        let dataDic = {
+            type : 'scattermapbox',
+            lat : currDic['latitude'],
+            lon : currDic['longitude'],
+            mode : 'markers',
+            text : currDic['labels'],
+            name : key,
+            marker: {
+                size : 12
+            },
+        };
+        plotlyList.push(dataDic);
+    }
+
+    let layout = {
+        autosize : false,
+        width: window.innerWidth - 1,
+        height: window.innerHeight,
+        hovermode:'closest',
+        mapbox: {
+            bearing:0,
+            center: {
+                lat: 42.88,
+                lon: -78.87
+            },
+            style: 'carto-darkmatter',
+            pitch:0,
+            zoom:10
+        },
+    };
+
+    Plotly.newPlot('map', plotlyList, layout);
+
+}
+
+generateBetterMapBox();
+
 
 
 
